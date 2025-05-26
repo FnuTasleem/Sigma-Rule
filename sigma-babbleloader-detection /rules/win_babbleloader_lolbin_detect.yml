@@ -1,1 +1,28 @@
-
+title: Potential BabbleLoader Execution
+id: a1c34aa2-0425-4954-bloader-babble-2025
+status: experimental
+description: Detects execution patterns associated with BabbleLoader malware.
+author: Fnu Tasleem
+date: 2023/10/25
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    ParentImage|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+    CommandLine|contains:
+      - 'regsvr32'
+      - 'rundll32'
+      - 'mshta'
+  condition: selection
+fields:
+  - CommandLine
+  - ParentImage
+  - Image
+level: high
+tags:
+  - attack.execution
+  - attack.t1218
+  - babbleloader
