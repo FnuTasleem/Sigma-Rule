@@ -1,1 +1,35 @@
-
+title: SocGholish FakeUpdate Infection via Browser-Spawned Script Engine
+id: 89fd4907-a118-4e99-a88e-20250517socg
+status: experimental
+description: Detects possible SocGholish fake update infections via browsers spawning script engines like powershell, wscript, or mshta.
+author: Fnu Tasleem
+date: 2024/05/12
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  parent_browsers:
+    ParentImage|endswith:
+      - '\chrome.exe'
+      - '\msedge.exe'
+      - '\firefox.exe'
+      - '\iexplore.exe'
+  child_scripts:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\wscript.exe'
+      - '\mshta.exe'
+      - '\cmd.exe'
+  condition: parent_browsers and child_scripts
+fields:
+  - Image
+  - ParentImage
+  - CommandLine
+  - User
+level: high
+tags:
+  - socgholish
+  - fakeupdate
+  - attack.execution
+  - attack.t1059
+  - initial_access
