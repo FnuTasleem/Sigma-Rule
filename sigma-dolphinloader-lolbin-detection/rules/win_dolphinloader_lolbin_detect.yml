@@ -1,1 +1,28 @@
-
+title: Potential Dolphin Loader Execution via LOLBins
+id: 3b3b1a6c-402e-4f5c-88c1-20250517d0l1
+status: experimental
+description: Detects execution patterns commonly associated with Dolphin Loader, which uses legitimate Windows binaries to execute downloaded payloads.
+author: Fnu Tasleem
+date: 2023/11/17
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    ParentImage|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+    CommandLine|contains:
+      - 'regsvr32'
+      - 'rundll32'
+      - 'mshta'
+  condition: selection
+fields:
+  - CommandLine
+  - ParentImage
+  - Image
+level: high
+tags:
+  - attack.execution
+  - attack.t1218
+  - dolphinloader
