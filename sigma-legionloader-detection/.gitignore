@@ -1,1 +1,4 @@
-
+*.log
+*.tmp
+*.bak
+.DS_Store
