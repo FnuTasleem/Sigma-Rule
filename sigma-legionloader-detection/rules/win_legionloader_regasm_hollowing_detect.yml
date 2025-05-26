@@ -1,1 +1,30 @@
-
+title: Legion Loader Execution via regasm and Process Hollowing
+id: b3e12201-5c7a-4aa0-9f34-20250517legion
+status: experimental
+description: Detects possible Legion Loader behavior leveraging regasm and process hollowing patterns.
+author: Fnu Tasleem
+date: 2024/04/17
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith: '\regasm.exe'
+    CommandLine|contains:
+      - '--nologo'
+      - '--silent'
+    ParentImage|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+  condition: selection
+fields:
+  - CommandLine
+  - Image
+  - ParentImage
+  - User
+level: high
+tags:
+  - attack.defense_evasion
+  - attack.t1218.009
+  - process_hollowing
+  - legionloader
